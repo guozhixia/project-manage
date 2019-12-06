@@ -5,7 +5,7 @@
             <el-container>
                 <el-aside width="200px">
                     <!-- 左侧导航栏 -->
-                     <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#f7f7f7" text-color="#000" active-text-color="#f55d54">
+                     <el-menu default-active="2" class="el-menu-vertical-demo" background-color="#f7f7f7" text-color="#000" active-text-color="#f55d54">
                         <!-- 导航一 -->
                         <el-submenu index="1">
                             <template slot="title">
@@ -85,13 +85,13 @@ export default {
         },
         menumethods(){
             this.$router.push({"name":"menu"})
-        },
-        handleOpen(key, keyPath) {
-            console.log(key, keyPath);
-        },
-        handleClose(key, keyPath) {
-            console.log(key, keyPath);
         }
+        // handleOpen(key, keyPath) {
+        //     console.log(key, keyPath);
+        // },
+        // handleClose(key, keyPath) {
+        //     console.log(key, keyPath);
+        // }
     }
 }
 </script>
