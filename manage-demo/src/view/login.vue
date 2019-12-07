@@ -115,7 +115,7 @@ export default {
                     //跳转页面
                     this.show=true
                     setTimeout(()=>{
-                        this.$router.push({"name":"base"})
+                        this.$router.push({"name":"user"})
                     },3000)
                 }else{
                     name=""

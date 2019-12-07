@@ -5,6 +5,8 @@ const login=()=>import("@/view/login.vue")
 const base=()=>import("@/view/base.vue")
 const user=()=>import("@/components/analyze/user.vue")
 const menu=()=>import("@/components/analyze/menu.vue")
+const list=()=>import("@/components/limits/list.vue")
+const add=()=>import("@/components/limits/add.vue")
 import axios from "axios"
 Vue.use(Router)
 
@@ -29,6 +31,16 @@ let router=new Router({
           path: 'menu',
           name: 'menu',
           component: menu
+        },
+        {
+          path: 'list',
+          name: 'list',
+          component: list
+        },
+        {
+          path: 'add',
+          name: 'add',
+          component: add
         }
       ]
     },

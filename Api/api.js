@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({extended:true}))
 //载入admins
 const adminModel=require("./model/admins.js")
 //写接口
+
 //第一个接口--验证用户名是否正确
     app.post("/login",(req,res)=>{
         let {name,password}=req.body
@@ -20,7 +21,7 @@ const adminModel=require("./model/admins.js")
                 let content ={name:data._id}; // 要生成token的主题信息
                 let secretOrPrivateKey="guo" // 这是加密的key（密钥） 
                 let token = jwt.sign(content, secretOrPrivateKey, {
-                expiresIn: 60*60*1  // 1小时过期
+                expiresIn: 60*60*36 // 1小时过期
             });
                 res.send({"err_code":200,"id":data._id,token:token})
             }else{
@@ -28,6 +29,7 @@ const adminModel=require("./model/admins.js")
             }
             })
          })
+         
 //第二个接口--验证token
 app.get('/checktoken', (req, res) => {
     let token = req.headers.token; // 从header中获取token
@@ -42,6 +44,32 @@ app.get('/checktoken', (req, res) => {
     })
 })
 
+//第三个接口--添加权限
+const limitModel=require("./model/limit.js")
+app.post("/addlimit",(req,res)=>{
+    //接受参数
+    let {title,name,pid}=req.body
+    //插入数据库
+    let obj={"name":name,"title":title,"pid":pid}
+    limitModel.create(obj,(err,data)=>{
+        if(err){
+            res.send({'err_code':400})
+        }else{
+            res.send({'err_code':200})
+        }
+    })
+})
+
+//第四个接口---查询接口--获取所有的接口
+app.get("/getlimit",(req,res)=>{
+    limitModel.find({},(err,data)=>{
+        if(err){
+            res.send({'err_code':400})
+        }else{
+            res.send({'err_code':200,info:data})
+        }
+    })
+})
 app.listen("3000",function(){
     console.log("welcome 3000")
 })

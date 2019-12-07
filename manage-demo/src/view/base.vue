@@ -40,8 +40,7 @@
                                 <span>权限</span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="1-1">基本配置</el-menu-item>
-                                <el-menu-item index="1-2">接入权限</el-menu-item>
+                                <el-menu-item index="3-1" @click="limit">权限列表</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
                     </el-menu>
@@ -105,7 +104,10 @@ export default {
             //清除本地缓存
             localStorage.removeItem("apitoken")
             //跳转到登录页面
-            this.$router.push({name:"login"})
+            // this.$router.push({name:"login"})
+        },
+        limit(){
+            this.$router.push({name:"list"})
         }
         // handleOpen(key, keyPath) {
         //     console.log(key, keyPath);
