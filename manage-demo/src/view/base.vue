@@ -1,7 +1,10 @@
 <template>
     <div class="base">
         <el-container>
-            <el-header>Header</el-header>
+            <el-header>
+                <span>渠道商管理平台</span>
+                <el-button @click="out">退出</el-button>
+            </el-header>
             <el-container>
                 <el-aside width="200px">
                     <!-- 左侧导航栏 -->
@@ -62,6 +65,18 @@
 .el-header{
     background: #f8f8f8;
 }
+.el-header>span{
+    font-size: 25px;
+    line-height: 60px;
+    color: #f55d54;
+}
+.el-button{
+    float: right;
+    margin: 10px;
+}
+.el-icon-close{
+    font-size: 10px;
+}
 .el-container{
     width: 100%;
     height: 100%;
@@ -85,6 +100,12 @@ export default {
         },
         menumethods(){
             this.$router.push({"name":"menu"})
+        },
+        out(){
+            //清除本地缓存
+            localStorage.removeItem("apitoken")
+            //跳转到登录页面
+            this.$router.push({name:"login"})
         }
         // handleOpen(key, keyPath) {
         //     console.log(key, keyPath);

@@ -13,9 +13,9 @@
                     <option value="管理员">企业</option>
                     <option value="管理员">平台</option>
                 </select>
-                <input type="text" placeholder="账户名">
-                <input type="password" placeholder="密码">
-                <button type="button" @click="denglv">登录</button>
+                <input type="text" placeholder="账户名" v-model="name">
+                <input type="password" placeholder="密码" v-model="password">
+                <button type="button" @click="denglv()">登录</button>
             </form>
         </div>
         <div v-else class="ok">
@@ -93,15 +93,35 @@ form>button{
 export default {
     data(){
         return{
-            show:false
+            show:false,
+            name:"",
+            password:""
         }
     },
     methods:{
+        //登录
         denglv(){
-           setTimeout(()=>{
-                this.$router.push({"name":"base"})
-           },3000)
-            this.show=true
+            //收集表达数据---ajax---接口
+            let {name,password}=this
+            //请求接口
+            this.axios.post("/login",{
+                name:name,
+                password:password
+            }).then(res=>{
+                // console.log(res.data)
+                if(res.data.err_code==200){
+                    //保存token
+                    localStorage.setItem("apitoken",JSON.stringify({id:res.data.id,token:res.data.token}))
+                    //跳转页面
+                    this.show=true
+                    setTimeout(()=>{
+                        this.$router.push({"name":"base"})
+                    },3000)
+                }else{
+                    name=""
+                    password=""
+                }
+            })
         }
     }
 }

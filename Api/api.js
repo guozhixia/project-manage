@@ -1,23 +1,19 @@
-//连接db
-const db=require("./db.js")
+
 const express=require("express")
 const app=express()
 const cors=require("cors")
 const bodyParser=require("body-parser")
 const jwt=require("jsonwebtoken")
-
 app.use(cors())
 app.use(bodyParser.json())
-app.listen("3000",function(){
-    console.log("welcome 3000")
-})
+app.use(bodyParser.urlencoded({extended:true}))
+//载入admins
+const adminModel=require("./model/admins.js")
 //写接口
 //第一个接口--验证用户名是否正确
-const adminSchema=db.Schema({name:{type:String},password:{type:String}})
-const adminModel=db.model("admins",adminSchema)
-app.use(bodyParser.urlencoded({extended:true}))
     app.post("/login",(req,res)=>{
         let {name,password}=req.body
+        // console.log(name,password)
             //  连接数据库并且查找是否存在
         adminModel.findOne({"name":name,"password":password},(err,data)=>{
             if(data){
@@ -26,9 +22,9 @@ app.use(bodyParser.urlencoded({extended:true}))
                 let token = jwt.sign(content, secretOrPrivateKey, {
                 expiresIn: 60*60*1  // 1小时过期
             });
-                res.send({"err_code":200,"id":data._id})
+                res.send({"err_code":200,"id":data._id,token:token})
             }else{
-                es.send({"err_code":400})
+                res.send({"err_code":400})
             }
             })
          })
@@ -44,4 +40,8 @@ app.get('/checktoken', (req, res) => {
             res.send({ 'err_code': 200 });
         }
     })
+})
+
+app.listen("3000",function(){
+    console.log("welcome 3000")
 })

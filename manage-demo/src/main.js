@@ -6,8 +6,15 @@ import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import animated from 'animate.css';
+//载入axios vueaxios 
+import axios from "axios"
+import VueAxios from "vue-axios"
 Vue.use(ElementUI);
 Vue.use(animated);
+Vue.use(VueAxios,axios);
+
+//设置全局的接口地址
+axios.defaults.baseURL="http://127.0.0.1:3000"
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
