@@ -30,7 +30,7 @@ export default {
       options: [
           //默认的一级权限---pid为0
           {
-              value:0,
+              value:0,//value就是他的id
               label:"一级权限"
           }
         
@@ -60,11 +60,11 @@ export default {
           }
         //   console.log(obj)
         //调用 添加的接口
-        this.axios.post("/addlimit",obj).then(res=>{
+        this.axios.post("/addlimit",obj).then(res=>{//把数据放在obj里面，点击添加时连接后台，把数据传给后台,后台中let {title,name,pid}=req.body接受参数，通过prop接受渲染在页面上
             if(res.data.err_code==200){
                 console.log("chvengg")
                 this.$router.push({name:"list"})
-            }else{
+            }else{//如果不正确就清空
                 this.name=""
                 this.title=""
             }
