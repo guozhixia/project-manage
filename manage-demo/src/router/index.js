@@ -5,8 +5,13 @@ const login=()=>import("@/view/login.vue")
 const base=()=>import("@/view/base.vue")
 const user=()=>import("@/components/analyze/user.vue")
 const menu=()=>import("@/components/analyze/menu.vue")
-const list=()=>import("@/components/limits/list.vue")
+const limitlist=()=>import("@/components/limits/limitlist.vue")
 const add=()=>import("@/components/limits/add.vue")
+const rolelist=()=>import("@/components/role/rolelist.vue")
+const addrole=()=>import("@/components/role/addrole.vue")
+const editrole=()=>import("@/components/role/editrole.vue")
+const adminlist=()=>import("@/components/admin/adminlist.vue")
+const addadmin=()=>import("@/components/admin/addadmin.vue")
 import axios from "axios"
 Vue.use(Router)
 
@@ -23,7 +28,7 @@ let router=new Router({
       component: base,
       children:[
         {
-          path: 'user',
+          path: 'User',
           name: 'user',
           component: user
         },
@@ -33,20 +38,45 @@ let router=new Router({
           component: menu
         },
         {
-          path: 'list',
-          name: 'list',
-          component: list
+          path: 'limitlist',
+          name: 'limitlist',
+          component: limitlist
         },
         {
           path: 'add',
           name: 'add',
           component: add
+        },
+        {
+          path: 'rolelist',
+          name: 'rolelist',
+          component: rolelist
+        },
+        {
+          path: 'addrole',
+          name: 'addrole',
+          component: addrole
+        },
+        {
+          path: 'editrole',
+          name: 'editrole',
+          component: editrole
+        },
+        {
+          path: 'adminlist',
+          name: 'adminlist',
+          component: adminlist
+        },
+        {
+          path: 'addadmin',
+          name: 'addadmin',
+          component: addadmin
         }
       ]
     },
     {
       path:"/",
-      redirect:"/base/user"
+      redirect:"/base/User"
     }
   ]
 })
@@ -62,7 +92,7 @@ router.beforeEach((to,from,next)=>{
     axios.get("/checktoken",{
       headers:{token:token}
     }).then(res=>{
-      console.log(res.data)
+      // console.log(res.data)
       //如果失败--跳转到登录页面
       if(res.data.err_code==200){
         next()

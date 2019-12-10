@@ -11,8 +11,9 @@
       <!-- 操作 删除 -->
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
+          <!-- 通过scope.row._id得到id。因为上面的prop接受的是——id，所以这边也写——id -->
           <el-button
-            @click.native.prevent="deleteRow(scope.$index, tableData)"
+            @click.native.prevent="deleteRow(scope.$index, tableData,scope.row._id)"
             type="text"
             size="small"
           >移除</el-button>
@@ -25,14 +26,27 @@
  <script>
 export default {
   methods: {
-    deleteRow(index, rows) {
-      rows.splice(index, 1);
+    deleteRow(index, rows,id) {
+    //  console.log(index)//下标
+    //  console.log(rows)//
+      this.axios.get("/limitdel",{
+        params:{
+          id:id
+        }
+      }).then(res=>{
+        if(res.data.err_code==200){
+           rows.splice(index, 1);
+        }
+      })
+    },
+    list(){
+        this.axios.get("/getlimit").then(res=>{
+        this.tableData=res.data.info
+    })
     }
   },
   mounted(){
-    this.axios.get("/getlimit").then(res=>{
-      this.tableData=res.data.info
-    })
+    this.list()
   },
   data() {
     return {

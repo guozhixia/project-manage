@@ -9,7 +9,8 @@ adminModel.find({},(err,data)=>{
     if(data.length==0){
         adminModel.create({
            "name":"guozhixia",
-           "password":"123"
+           "password":"123",
+           "roleid":""
         },(err,data)=>{
             if(err){
                 console.log(err)

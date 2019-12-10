@@ -70,6 +70,115 @@ app.get("/getlimit",(req,res)=>{
         }
     })
 })
+
+//第五个接口---根据id删除权限
+app.get("/limitdel",(req,res)=>{
+    //获取——id
+    let _id=req.query.id
+    //递归删除子权限
+    treedel(_id)
+    //删除自己
+    limitModel.deleteMany({_id:_id},(err,data)=>{
+        res.send({err_code:200})
+    })
+})
+//递归删除子权限
+function treedel(id,res){
+    limitModel.find({"pid":id},(err,data)=>{
+        if(data.length>0){
+            for(let v of data){
+                treedel(v._id)
+                limitModel.deleteMany({_id:v._id},(err,data)=>{
+                    // console.log(data)
+                })
+            }
+        }
+    })
+}
+
+//第六个接口  post ---角色名称  权限数组
+const roleModel=require("./model/role.js")
+app.post("/addrole",(req,res)=>{
+    let {title,limitid}=req.body
+    // console.log(req.body)
+    roleModel.create({"title":title,"limitid":limitid},(err,data)=>{
+        if(err){
+            res.send({err_code:400})
+        }else{
+            res.send({err_code:200,info:data})
+        }
+    })
+})
+//第七个接口 get----获取所有的角色
+app.get("/rolelist",(req,res)=>{
+    roleModel.find({},(err,data)=>{
+        if(err){
+            res.send({'err_code':400})
+        }else{
+            res.send({'err_code':200,info:data})
+        }
+    })
+})
+
+//第八个接口--删除角色----get--接受id---通过id删除
+app.get("/delrole",(req,res)=>{
+    roleModel.deleteOne({_id:req.query.id},(err,data)=>{
+        if(err){
+            res.send({'err_code':400})
+        }else{
+            res.send({'err_code':200,info:data})
+        } 
+    })
+})
+
+//第九个接口--修改1 根据角色 id 获取角色信息
+app.get("/roleinfo",(req,res)=>{
+    roleModel.findOne({_id:req.query.id},(err,data)=>{
+        if(err){
+            res.send({'err_code':400})
+        }else{
+            res.send({'err_code':200,info:data})
+        } 
+    })
+})
+
+//第十个接口--修改2  post 角色名称 角色id -----根据角色id 修改数据
+app.post("/roledit",(req,res)=>{
+    let {id,title,limitid}=req.body
+    roleModel.updateOne({_id:id},{title:title,limitid:limitid},(err,data)=>{
+        if(err){
+            res.send({'err_code':400})
+        }else{
+            res.send({'err_code':200})
+        } 
+    })
+})
+
+//第十一个接口--添加后台管理员----post --管理员名--角色id
+app.post("/addperson",(req,res)=>{
+    let {admin,roleid,password}=req.body
+    adminModel.create({name:admin,password:password,roleid:roleid},(err,data)=>{
+        if(err){
+            res.send({'err_code':400})
+        }else{
+            res.send({'err_code':200,info:data})
+        } 
+    })
+})
+//第十二个接口--获取所有管理员
+app.get("/getperson",(req,res)=>{
+    // adminModel.findOne({},(err,data)=>{
+    //     if(err){
+    //         res.send({'err_code':400})
+    //     }else{
+    //         res.send({'err_code':200,info:data})
+    //     } 
+    // })
+    adminModel.find().populate("adminModel").exec((err,data)=>{
+        res.send({"err_code":200,info:data})
+    })
+})
+
 app.listen("3000",function(){
     console.log("welcome 3000")
 })
