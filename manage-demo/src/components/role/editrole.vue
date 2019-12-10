@@ -1,7 +1,7 @@
 <template>
   <div class="ele">
      <el-form ref="form" label-width="100px">
-      <el-form-item label="角色">
+      <el-form-item label="管理员名">
         <el-input v-model="title"></el-input>
       </el-form-item>
       <el-form-item label="权限">
@@ -67,9 +67,9 @@ export default {
                 id:this.$route.params.id,
                 limitid:this.value
             }
-            console.log(obj)
+            // console.log(obj)
             this.axios.post("/roledit",obj).then(res=>{
-                console.log(res)
+                // console.log(res)
                 if(res.data.err_code==200){
                     this.$router.push({name:"rolelist"})
                 }

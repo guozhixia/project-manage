@@ -165,6 +165,7 @@ app.post("/addperson",(req,res)=>{
         } 
     })
 })
+
 //第十二个接口--获取所有管理员
 app.get("/getperson",(req,res)=>{
     // adminModel.findOne({},(err,data)=>{
@@ -174,8 +175,90 @@ app.get("/getperson",(req,res)=>{
     //         res.send({'err_code':200,info:data})
     //     } 
     // })
-    adminModel.find().populate("adminModel").exec((err,data)=>{
+    adminModel.find().populate("roleid").exec((err,data)=>{
         res.send({"err_code":200,info:data})
+    })
+})
+
+//第十三个接口----删除角色
+app.get("/deladmin",(req,res)=>{
+    adminModel.deleteOne({_id:req.query.id},(err,data)=>{
+        if(err){
+            res.send({'err_code':400})
+        }else{
+            res.send({'err_code':200})
+        } 
+    })
+})
+
+//第十四个接口---根据id查找管理员
+app.get("/findadmin",(req,res)=>{
+    let id=req.query.id
+    adminModel.findOne({_id:id},(err,data)=>{
+        if(err){
+            res.send({'err_code':400})
+        }else{
+            res.send({'err_code':200,info:data})
+        } 
+    })
+})
+//第十五个接口---修改---admin password adminid
+app.post("/editadmin",(req,res)=>{
+    let {password,id,admin,roleid}=req.body
+    adminModel.updateOne({_id:id},{"name":admin,"password":password,"roleid":roleid},(err,data)=>{
+        if(err){
+            res.send({'err_code':400})
+        }else{
+            res.send({'err_code':200})
+        } 
+    })
+})
+//第十六个接口---根据管理员id获取管理员信息以及权限
+app.get("/getadmin",(req,res)=>{
+    let id=req.query.id
+    //查询管理员列表
+    //id---查询管理员列表---jsid----角色---权限id----权限表
+    adminModel.findOne({_id:id}).populate("roleid").exec((err,data)=>{
+        // res.send(data)
+        let admins={"_id":data._id,"name":data.name,"password":data.password}
+        //获取到管理员对应的角色、角色对应的权限、但是权限是一个二维数组并没有重复
+        //权限数组 降维 去重
+        let limitid=data.roleid.limitid
+        // console.log(limitid)
+        let limit=Array.from(new Set(limitid.flat(Infinity)))
+        
+        // admins.limitarr=limit
+        // res.send(admins)
+        limitModel.find({_id:{$in:limit}},(err,data)=>{
+            admins.limitarr=data
+            res.send(admins)
+
+        })
+    })
+})
+
+//第十七个接口----根据管理员的id获取管理员 信息以及权限
+app.get("/adminlimit",(req,res)=>{
+    
+})
+
+//第十八个接口----判断是否有权限---get---name(路由name===权限表里的name)
+app.get("/checklimit",(req,res)=>{
+    let name=req.query.name
+    let id=req.query.id
+    //查找有那些权限
+    adminModel.findOne({_id:id}).populate("roleid").exec((err,data)=>{
+        //data={"_id":data._id,"name":data.name,"password":data.password}
+        let limit=Array.from(new Set(data.roleid.limitid.flat(Infinity)))
+        limitModel.find({_id:{$in:limit}},(err2,data2)=>{
+            let f=data2.findIndex(val=>val.name==name)
+            if(f>-1){
+                res.send({err_code:200})
+            }else{
+                res.send({err_code:400})
+            }
+
+        })
     })
 })
 

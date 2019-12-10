@@ -12,6 +12,7 @@ const addrole=()=>import("@/components/role/addrole.vue")
 const editrole=()=>import("@/components/role/editrole.vue")
 const adminlist=()=>import("@/components/admin/adminlist.vue")
 const addadmin=()=>import("@/components/admin/addadmin.vue")
+const editadmin=()=>import("@/components/admin/editadmin.vue")
 import axios from "axios"
 Vue.use(Router)
 
@@ -58,7 +59,7 @@ let router=new Router({
           component: addrole
         },
         {
-          path: 'editrole',
+          path: 'editrole/:id',
           name: 'editrole',
           component: editrole
         },
@@ -71,6 +72,11 @@ let router=new Router({
           path: 'addadmin',
           name: 'addadmin',
           component: addadmin
+        },
+        {
+          path: 'editadmin/:id',
+          name: 'editadmin',
+          component: editadmin
         }
       ]
     },
@@ -87,6 +93,7 @@ let router=new Router({
 router.beforeEach((to,from,next)=>{
   //获取token
   let token=localStorage.getItem("apitoken")?JSON.parse(localStorage.getItem("apitoken")).token:""
+  let id=localStorage.getItem("apitoken")?JSON.parse(localStorage.getItem("apitoken")).id:""
   //如果是登录页面--不用验证，排除了
   if(to.name!="login"){
     axios.get("/checktoken",{
@@ -95,9 +102,23 @@ router.beforeEach((to,from,next)=>{
       // console.log(res.data)
       //如果失败--跳转到登录页面
       if(res.data.err_code==200){
-        next()
+        //有权限进入
+        axios.get("/checklimit",{
+          params:{
+            id:id,
+            name:to.name
+          }
+        }).then(val=>{
+          if(val.data.err_code==200){
+            next()
+          }else{
+            alert("没有权限")
+          }
+        })
+        
+        //没有权限 弹框--没有权限请联系工作人员
       }else{
-        router.push({name:"/login"})
+        router.push({name:"login"})
         next()
       }
     })

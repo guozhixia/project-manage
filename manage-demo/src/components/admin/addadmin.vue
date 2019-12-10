@@ -29,26 +29,26 @@ export default {
     return {
       admin: "",
       password:"",
-      value: [],
+      value: "",
       options: []
     };
   },
   //页面一挂载时就获取数据
   mounted(){
-      //请求所有的权限
+      //请求所有的权限---获取角色列表---下拉框要显示
      this.axios.get("/rolelist").then(res=>{
          if(res.data.err_code==200){
-             this.options=res.data.info,0
+             this.options=res.data.info
+            // console.log(res.data.info)
          }
-       
      })
   },
 
   methods:{
       add(){
-          let obj={admin:this.admin,password:this.password,adminid:this.value}
+          let obj={admin:this.admin,password:this.password,roleid:this.value}
           this.axios.post("/addperson",obj).then(res=>{
-            console.log(res)
+            // console.log(res)
             if(res.data.err_code==200){
               // alert("200")
               //跳转到表单页面
@@ -56,12 +56,15 @@ export default {
             }
           })
       },
- 
+
   }
 }
 </script>
 
 <style scoped>
+div{
+  width: 100%;
+}
 .el-button{
     float: left;
 }

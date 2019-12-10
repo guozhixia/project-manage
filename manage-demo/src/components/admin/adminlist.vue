@@ -5,8 +5,8 @@
       <el-table-column fixed prop="_id" label="id"></el-table-column>
       <el-table-column fixed prop="name" label="管理员名"></el-table-column>
       <el-table-column fixed prop="password" label="管理员密码"></el-table-column>
-      <el-table-column fixed prop="jsid" label="角色id"></el-table-column>
-      <el-table-column fixed prop="jsname" label="角色名"></el-table-column>
+      <el-table-column fixed prop="roleid._id" label="角色id"></el-table-column>
+      <el-table-column fixed prop="roleid.title" label="角色名"></el-table-column>
 
       <!-- 操作 删除 -->
       <el-table-column fixed="right" label="操作">
@@ -39,15 +39,26 @@ export default {
   },
   mounted() {
     this.axios.get("/getperson").then(res => {
-      console.log(res);
+      // console.log(res);
       this.tableData = res.data.info;
     });
   },
   methods: {
     editRow(id) {
       // 跳转到 修改页面
+      this.$router.push({name:"editadmin",params:{id:id}})
     },
-    deleteRow(index, row, id) {}
+    deleteRow(index, row, id) {
+      this.axios.get("/deladmin",{
+        params:{
+          id:id
+        }
+      }).then(res=>{
+        if(res.data.err_code==200){
+          row.splice(index, 1);
+        }
+      })
+    }
   }
 };
 </script>

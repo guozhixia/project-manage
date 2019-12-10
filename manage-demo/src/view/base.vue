@@ -3,7 +3,7 @@
         <el-container>
             <el-header>
                 <span>渠道商管理平台</span>
-                <el-button @click="out">退出</el-button>
+                <el-button @click="out">{{adminname}}退出</el-button>
             </el-header>
             <el-container>
                 <el-aside width="200px">
@@ -72,7 +72,8 @@
 export default {
     data(){
         return{
-            left:[]
+            left:[],
+            adminname:""
         }
     },
     methods: {
@@ -83,7 +84,7 @@ export default {
             //清除本地缓存
             localStorage.removeItem("apitoken")
             //跳转到登录页面
-            // this.$router.push({name:"login"})
+            this.$router.push({name:"login"})
         },
         treelist(info,pid){
             let data=[]
@@ -105,9 +106,18 @@ export default {
     },
       mounted(){
         //请求所有权限，渲染到页面
-        this.axios.get("/getlimit").then(res=>{
-            // console.log(res.data)
-            this.left=res.data.info
+        // this.axios.get("/getlimit").then(res=>{
+        //     // console.log(res.data)
+        //     this.left=res.data.info
+        // })
+        //根据管理员的id查找对应的全下渲染到左侧导航
+        this.axios.get("/getadmin",{
+            params:{
+                id:JSON.parse(localStorage.getItem("apitoken")).id
+            }
+        }).then(res=>{
+            this.left=res.data.limitarr
+            this.adminname=res.data.name
         })
     },
     computed:{
