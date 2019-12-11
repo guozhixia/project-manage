@@ -13,6 +13,8 @@ const editrole=()=>import("@/components/role/editrole.vue")
 const adminlist=()=>import("@/components/admin/adminlist.vue")
 const addadmin=()=>import("@/components/admin/addadmin.vue")
 const editadmin=()=>import("@/components/admin/editadmin.vue")
+const goodslist=()=>import("@/components/goods/goodslist.vue")
+const addgoods=()=>import("@/components/goods/addgoods.vue")
 import axios from "axios"
 Vue.use(Router)
 
@@ -77,6 +79,16 @@ let router=new Router({
           path: 'editadmin/:id',
           name: 'editadmin',
           component: editadmin
+        },
+        {
+          path: 'goodslist',
+          name: 'goodslist',
+          component: goodslist
+        },
+        {
+          path: 'addgoods',
+          name: 'addgoods',
+          component: addgoods
         }
       ]
     },

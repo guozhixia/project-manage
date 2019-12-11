@@ -262,6 +262,56 @@ app.get("/checklimit",(req,res)=>{
     })
 })
 
+//第十九个接口---文件图片上传的接口
+//用body接受是接收不到的
+let multer=require("multer")
+//硬盘存储
+let storage = multer.diskStorage({
+    // 文件存储路径
+    destination: function (req, file, cb) {
+        cb(null, "./public/sort")
+    },
+    //文件名
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+})
+let up = multer({ storage: storage });
+//静态资源发布
+app.use(express.static('public'))
+app.post("/fileup",up.single("picture"),(req,res)=>{
+    // console.log(req.headers.host+"/sort/"+req.file.originalname)
+    let imgurl=req.headers.host+"/sort/"+req.file.originalname
+    res.send({imgurl:imgurl})
+})
+//商品分类
+//第二十个接口--查找所有分类，返回
+const goodsModel=require("./model/sortgoods")
+app.get("/sortgoods",(req,res)=>{
+    //monogoose--查找所有分类
+    goodsModel.find({},(err,data)=>{
+        if(err){
+            res.send({'err_code':400})
+        }else{
+            res.send({'err_code':200,info:data})
+        } 
+    })
+})
+//第二十一个接口---添加分类
+app.post("/addgoods",(req,res)=>{
+    let {title,imgurl,pid}=req.body
+    let obj={"title":title,"imgurl":imgurl,"pid":pid}
+    goodsModel.create(obj,(err,data)=>{
+        if(err){
+            res.send({'err_code':400})
+        }else{
+            res.send({'err_code':200})
+        } 
+    })
+})
+//第二十二个接口---删除分类
+//第二十一个接口---添加分类
+
 app.listen("3000",function(){
     console.log("welcome 3000")
 })
