@@ -310,8 +310,27 @@ app.post("/addgoods",(req,res)=>{
     })
 })
 //第二十二个接口---删除分类
-//第二十一个接口---添加分类
+//第二十三个接口---添加分类
 
 app.listen("3000",function(){
     console.log("welcome 3000")
+})
+
+//第二十四个接口---测试商品信息+分页
+const testModel=require("./model/test.js")
+//分页
+app.get("/test",(req,res)=>{
+    testModel.count({},(er,data)=>{
+        res.send({"sum":data})
+    })
+})
+//分页返回数据
+app.get("/testdata",(req,res)=>{
+    //获取page--第几页
+    //limit---m每页显示几条
+    let page=Number(req.query.page)
+    let limit=Number(req.query.limit)
+    testModel.find({}).skip((page-1)*limit).limit(limit).exec((err,data)=>{
+        res.send({"info":data})
+    })
 })

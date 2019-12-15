@@ -15,6 +15,8 @@ const addadmin=()=>import("@/components/admin/addadmin.vue")
 const editadmin=()=>import("@/components/admin/editadmin.vue")
 const goodslist=()=>import("@/components/goods/goodslist.vue")
 const addgoods=()=>import("@/components/goods/addgoods.vue")
+const addsp=()=>import("@/components/shangpin/addsp.vue")
+const splist=()=>import("@/components/shangpin/splist.vue")
 import axios from "axios"
 Vue.use(Router)
 
@@ -89,6 +91,16 @@ let router=new Router({
           path: 'addgoods',
           name: 'addgoods',
           component: addgoods
+        },
+        {
+          path: 'addsp',
+          name: 'addsp',
+          component: addsp
+        },
+        {
+          path: 'splist',
+          name: 'splist',
+          component: splist
         }
       ]
     },

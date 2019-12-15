@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./vue-2.6.10.min.js"></script>
+    <style>
+        .guige{
+            width: 100%;
+            display: flex;
+        }
+        .left{
+            /* width: 100px; */
+            /* height: 100px; */
+            /* margin-right: 50px; */
+            border-right: 1px solid black;
+        }
+        .left>input{
+            margin-right: 50px;
+        }
+        .right{
+            margin-left: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <gg v-for="v in x"></gg>
+        <button @click="xzgg">新增规格</button>
+    </div>
+</body>
+<script>
+    Vue.component("gg",{
+        data(){
+            return{y:1}
+        },
+        template:`
+        <div class="guige">
+            <div class="left">
+                <input type="text" placeholder="规格名">
+            </div>
+            <div class="right">
+               <ggcan v-for="v in y"></ggcan>
+                <button @clcik="xzggcx">新增</button>
+            </div>
+        </div>
+        `,
+        methods:{
+            xzggcx(){
+                this.y+=1
+            }
+        }
+    })
+    Vue.component("ggcan",{
+        template:`
+             <div>
+                    <input type="text" placeholder="参数名">
+                    <input type="text" placeholder="对应价格">
+                </div>
+        `
+    })
+let  vm=new Vue({
+    el:"#app",
+    data:{
+        x:1
+    },
+    // components:{
+    //     gg:gg
+    // },
+    methods:{
+        xzgg(){
+            this.x+=1
+        }
+    }
+})
+</script>
+</html>
